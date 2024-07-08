@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./index.css";
+import axios from "axios";
 export interface Item {
   id: string;
   item_name: string;
@@ -30,7 +31,6 @@ type WheelComponentProps = {
 const WheelComponent: React.FC<WheelComponentProps> = ({
   segments,
   segColors,
-  winningSegment,
   onFinished,
   primaryColor,
   primaryColoraround,
@@ -58,7 +58,23 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   let frames: number = 0;
   const centerX: number = 300;
   const centerY: number = 300;
-
+  const [winning, setWinning] = useState("");
+  const [winning_id, setWinningID] = useState("");
+  const fetchRandom = async () => {
+    try {
+      const { data } = await axios.get(
+        "https://api.pripgo.com/event/items/random"
+      );
+      if (data.status === 1) {
+        setWinning(data.data.item_name);
+        setWinningID(data.data.id);
+        return data.data.item_name;
+      }
+      return "";
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -72,7 +88,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
         canvas.removeEventListener("click", spin);
       }
     };
-  }, [segments, winningSegment]);
+  }, [segments]);
 
   const wheelInit = () => {
     initCanvas();
@@ -85,8 +101,9 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
       canvasContext = canvas.getContext("2d");
     }
   };
-
-  const spin = () => {
+  let winningSegment = "";
+  const spin = async () => {
+    winningSegment = await fetchRandom();
     isStarted = true;
     if (timerHandle === 0) {
       spinStart = new Date().getTime();
@@ -102,6 +119,9 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
     const duration = new Date().getTime() - spinStart;
     let progress = 0;
     let finished = false;
+    console.log("currentSegment", currentSegment);
+    console.log("winningSegment", winningSegment);
+
     if (duration < upTime) {
       progress = duration / upTime;
       angleDelta = maxSpeed * Math.sin((progress * Math.PI) / 2);
