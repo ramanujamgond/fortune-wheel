@@ -21,7 +21,6 @@ function Wheel({ setFormState }: WheelProps) {
   const [segments, setSegemenmt] = useState<Item[]>([]);
   const [winning, setWinning] = useState("");
   const [winning_id, setWinningID] = useState("");
-  const [loading, setLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const { width, height } = useWindowSize();
   const onFinished = (winner: any) => {
@@ -36,10 +35,11 @@ function Wheel({ setFormState }: WheelProps) {
     });
   };
 
+  console.log(winning_id);
+
   // fetch items
   const fetchItem = async () => {
     try {
-      setLoading(true);
       const { data } = await axios.get("https://api.pripgo.com/event/items");
       if (data.status === 1) {
         console.log(data.data);
@@ -47,14 +47,11 @@ function Wheel({ setFormState }: WheelProps) {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchRandom = async () => {
     try {
-      setLoading(true);
       const { data } = await axios.get(
         "https://api.pripgo.com/event/items/random"
       );
@@ -65,8 +62,6 @@ function Wheel({ setFormState }: WheelProps) {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 

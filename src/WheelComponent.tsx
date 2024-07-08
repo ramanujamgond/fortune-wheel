@@ -32,8 +32,6 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   segColors,
   winningSegment,
   onFinished,
-  onRotate,
-  onRotatefinish,
   primaryColor,
   primaryColoraround,
   contrastColor,
@@ -43,8 +41,6 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   upDuration = 1000,
   downDuration = 100,
   fontFamily = "proxima-nova",
-  width = 100,
-  height = 100,
 }) => {
   let currentSegment: string = "";
   let isStarted: boolean = false;

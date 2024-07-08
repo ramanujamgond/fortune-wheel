@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import UserSignup from "./UserSignup";
 import Wheel from "./Wheel";
