@@ -4,6 +4,7 @@ import axios from "axios";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Swal from "sweetalert2";
 import Confetti from "react-confetti";
+import { Loader } from "lucide-react";
 const segColors = [
   "#673bb7",
   "#03a9f5",
@@ -97,7 +98,12 @@ function Wheel({ setFormState }: WheelProps) {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      {loading && <div>Loading...</div>}
+      {loading && (
+        <div className="flex items-center gap-2">
+          <Loader className="animate-spin" />
+          Loading...
+        </div>
+      )}
       {!loading && segments.length > 0 && (
         <WheelComponent
           segments={segments}
