@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import WheelComponent, { Item } from "./WheelComponent";
 import axios from "axios";
 import useWindowSize from "react-use/lib/useWindowSize";
+import Swal from "sweetalert2";
 import Confetti from "react-confetti";
 const segColors = [
   "#FCC749",
@@ -12,7 +13,11 @@ const segColors = [
   "#70C9E9",
   "#FFF1D7",
 ];
-function Wheel() {
+
+interface WheelProps {
+  setFormState: (value: boolean) => void;
+}
+function Wheel({ setFormState }: WheelProps) {
   const [segments, setSegemenmt] = useState<Item[]>([]);
   const [winning, setWinning] = useState("");
   const [winning_id, setWinningID] = useState("");
@@ -21,6 +26,14 @@ function Wheel() {
   const { width, height } = useWindowSize();
   const onFinished = (winner: any) => {
     setShowConfetti(true);
+    Swal.fire({
+      position: "bottom",
+      padding: "1em",
+      title: `Woohoo! You've won ${winner}!`,
+      text: "Snap a screenshot or show this screen to the host to claim your prize!",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+    });
   };
 
   // fetch items
@@ -61,6 +74,29 @@ function Wheel() {
     fetchItem();
     fetchRandom();
   }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: any) => {
+      console.log("User attempted to reload or close the page.");
+      // Prompt the user with a confirmation dialog
+      event.preventDefault();
+      event.returnValue = ""; // For older browsers
+    };
+
+    const handleUnload = () => {
+      console.log("User confirmed the reload or close action.");
+      setFormState(true);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
+    };
+  }, []);
+
   return (
     <div className="flex items-center justify-center h-screen">
       {segments.length > 0 && winning && (

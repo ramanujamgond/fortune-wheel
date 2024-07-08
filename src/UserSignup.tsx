@@ -16,10 +16,9 @@ const clearErrorAfterTimeout = ({ setError }: ClearErrorAfterTimeoutProps) => {
 
 interface UserSignupProps {
   setFormState: (value: boolean) => void;
-  setWheelState: (value: boolean) => void;
 }
 
-const UserSignup = ({ setFormState, setWheelState }: UserSignupProps) => {
+const UserSignup = ({ setFormState }: UserSignupProps) => {
   const [whatsAppNumberStatus, setWhatsAppNumberStatus] =
     useState<boolean>(true);
   const [userName, setUserName] = useState<string>("");
@@ -112,7 +111,6 @@ const UserSignup = ({ setFormState, setWheelState }: UserSignupProps) => {
       );
       if (userSubmitResponse.data.status === 1) {
         setFormState(false);
-        setWheelState(true);
       } else if (userSubmitResponse.data.status === 0) {
         Swal.fire({
           icon: "error",
@@ -128,7 +126,7 @@ const UserSignup = ({ setFormState, setWheelState }: UserSignupProps) => {
 
   return (
     <div>
-      <main className="flex min-h-screen flex-col items-center justify-center p-8">
+      <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="z-10 w-full max-w-5xl font-mono">
           <div className="text-3xl font-bold text-center">
             Please provide the information to claim your surprise prize.
