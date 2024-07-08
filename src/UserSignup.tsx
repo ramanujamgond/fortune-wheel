@@ -4,6 +4,15 @@ import { Checkbox } from "./components/ui/checkbox";
 import { Button } from "./components/ui/button";
 import axios from "axios";
 
+interface ClearErrorAfterTimeoutProps {
+  setError: (value: string) => void;
+}
+const clearErrorAfterTimeout = ({ setError }: ClearErrorAfterTimeoutProps) => {
+  setTimeout(() => {
+    setError("");
+  }, 3000);
+};
+
 const UserSignup = () => {
   const [whatsAppNumberStatus, setWhatsAppNumberStatus] =
     useState<boolean>(true);
@@ -13,16 +22,95 @@ const UserSignup = () => {
   const [emailId, setEmailId] = useState<string>("");
   const [emailIdErrorText, setEmailIdErrorText] = useState<string>("");
 
-  const [phoneNumber, setPhoneNumber] = useState<number>();
+  const [phoneNumber, setPhoneNumber] = useState<string>();
   const [phoneNumberErrorText, setPhoneNumberErrorText] = useState<string>("");
 
-  const [whatsAppNumber, setWhatsAppNumber] = useState<number>();
+  const [whatsAppNumber, setWhatsAppNumber] = useState<string>();
   const [whatsAppNumberErrorText, setWhatsAppNumberErrorText] =
-    useState<number>();
+    useState<string>("");
 
   const [propertyName, setPropertyName] = useState<string>("");
+  const [propertyNameErrorText, setPropertyNameErrorText] =
+    useState<string>("");
 
-  const handleFormSubmit = () => {};
+  const [propertyLocation, setPropertyLocation] = useState<string>("");
+  const [propertyLocationErrorText, setPropertyLocationErrorText] =
+    useState<string>("");
+
+  const handleFormSubmit = async () => {
+    if (!userName || userName.length === 0) {
+      setUserNameErrorText("Enter the guest name.");
+      clearErrorAfterTimeout({ setError: setUserNameErrorText });
+      return;
+    }
+
+    if (userName.length < 3) {
+      setUserNameErrorText("Guest name must be at least 2 characters long.");
+      clearErrorAfterTimeout({ setError: setUserNameErrorText });
+      return;
+    }
+
+    if (!emailId) {
+      setEmailIdErrorText("Email id is required.");
+      clearErrorAfterTimeout({ setError: setEmailIdErrorText });
+      return;
+    }
+
+    // regx to check for the valid email id
+    const validEmailId = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!validEmailId.test(emailId)) {
+      setEmailIdErrorText("Enter a valid email address.");
+      clearErrorAfterTimeout({ setError: setEmailIdErrorText });
+      return;
+    }
+
+    if (!phoneNumber) {
+      setPhoneNumberErrorText("Mobile number is required.");
+      clearErrorAfterTimeout({ setError: setPhoneNumberErrorText });
+      return;
+    }
+
+    if (!whatsAppNumberStatus) {
+      if (!whatsAppNumber) {
+        setWhatsAppNumberErrorText("WhatsApp number is required.");
+        clearErrorAfterTimeout({ setError: setWhatsAppNumberErrorText });
+        return;
+      }
+    }
+
+    if (!propertyName) {
+      setPropertyNameErrorText("Property name is required.");
+      clearErrorAfterTimeout({ setError: setPropertyNameErrorText });
+      return;
+    }
+
+    if (!propertyLocation) {
+      setPropertyLocationErrorText("Property Location is required.");
+      clearErrorAfterTimeout({ setError: setPropertyLocationErrorText });
+      return;
+    }
+
+    const payload = {
+      full_name: userName,
+      email_id: emailId,
+      mobile_no: phoneNumber,
+      whatsapp_no: whatsAppNumber ? whatsAppNumber : phoneNumber,
+      property_name: propertyName,
+      property_location: propertyLocation,
+    };
+
+    try {
+      const userSubmitResponse = await axios.post(
+        `https://api.pripgo.com/event/users`,
+        payload
+      );
+      console.log("userSubmitResponst", userSubmitResponse);
+    } catch (error) {
+      console.log(error);
+      new Error("Unable to create user");
+    } finally {
+    }
+  };
   return (
     <div>
       <main className="flex min-h-screen flex-col items-center justify-center p-8">
@@ -52,9 +140,13 @@ const UserSignup = () => {
                 type="email"
                 className="h-12 text-base"
                 placeholder="Email Id"
+                value={emailId}
+                onChange={(e) => {
+                  setEmailId(e.target.value);
+                }}
               />
               <span className="text-xs text-red-600 text-left w-100 block">
-                {userNameErrorText}
+                {emailIdErrorText}
               </span>
             </div>
 
@@ -63,6 +155,10 @@ const UserSignup = () => {
                 type="number"
                 className="h-12 text-base"
                 placeholder="Mobile Number"
+                value={phoneNumber}
+                onChange={(e) => {
+                  setPhoneNumber(e.target.value);
+                }}
               />
               <div className="flex items-center justify-betweens w-100 space-x-2 my-3 mx-2">
                 <Checkbox
@@ -80,7 +176,7 @@ const UserSignup = () => {
                 </label>
               </div>
               <span className="text-xs text-red-600 text-left w-100 block">
-                {userNameErrorText}
+                {phoneNumberErrorText}
               </span>
             </div>
 
@@ -90,9 +186,11 @@ const UserSignup = () => {
                   type="number"
                   className="h-12 text-base"
                   placeholder="Enter your whatsApp number"
+                  value={whatsAppNumber}
+                  onChange={(e) => setWhatsAppNumber(e.target.value)}
                 />
                 <span className="text-xs text-red-600 text-left w-100 block">
-                  {userNameErrorText}
+                  {whatsAppNumberErrorText}
                 </span>
               </div>
             )}
@@ -102,9 +200,11 @@ const UserSignup = () => {
                 type="text"
                 className="h-12 text-base"
                 placeholder="Property Name"
+                value={propertyName}
+                onChange={(e) => setPropertyName(e.target.value)}
               />
               <span className="text-xs text-red-600 text-left w-100 block">
-                {userNameErrorText}
+                {propertyNameErrorText}
               </span>
             </div>
 
@@ -113,9 +213,11 @@ const UserSignup = () => {
                 type="text"
                 className="h-12 text-base"
                 placeholder="Property Location"
+                value={propertyLocation}
+                onChange={(e) => setPropertyLocation(e.target.value)}
               />
               <span className="text-xs text-red-600 text-left w-100 block">
-                {userNameErrorText}
+                {propertyLocationErrorText}
               </span>
             </div>
 
