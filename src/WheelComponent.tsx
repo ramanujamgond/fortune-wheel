@@ -1,8 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./index.css";
+export interface Item {
+  id: string;
+  item_name: string;
+  quantity: number;
+  probability: number;
+}
 
 type WheelComponentProps = {
-  segments: string[];
+  segments: Item[];
   segColors: string[];
   winningSegment: string | null;
   onFinished: (segment: string) => void;
@@ -70,7 +76,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
         canvas.removeEventListener("click", spin);
       }
     };
-  }, []);
+  }, [segments, winningSegment]);
 
   const wheelInit = () => {
     initCanvas();
@@ -171,7 +177,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
     ctx.rotate((lastAngle + angle) / 2);
     ctx.fillStyle = contrastColor || "white";
     ctx.font = "bold 1em " + fontFamily;
-    ctx.fillText(value.substr(0, 21), size / 2 + 20, 0);
+    ctx.fillText(value.item_name.substr(0, 21), size / 2 + 20, 0);
     ctx.restore();
   };
 
@@ -210,7 +216,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
     ctx.beginPath();
     ctx.arc(centerX, centerY, size, 0, PI2, false);
     ctx.closePath();
-    ctx.lineWidth = 25;
+    ctx.lineWidth = 6;
     ctx.strokeStyle = primaryColoraround || "white";
     ctx.stroke();
   };
@@ -237,7 +243,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
     ctx.textBaseline = "middle";
     ctx.fillStyle = "transparent";
     ctx.font = "bold 1.5em " + fontFamily;
-    currentSegment = segments[i];
+    currentSegment = segments[i].item_name;
     isStarted &&
       ctx.fillText(currentSegment, centerX + 10, centerY + size + 50);
   };
@@ -249,7 +255,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   };
 
   return (
-    <div id="wheel">
+    <div id="wheel" className="">
       <canvas
         id="canvas"
         ref={canvasRef}
