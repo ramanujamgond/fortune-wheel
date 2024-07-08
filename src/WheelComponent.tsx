@@ -76,7 +76,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
         canvas.removeEventListener("click", spin);
       }
     };
-  }, []);
+  }, [segments, winningSegment]);
 
   const wheelInit = () => {
     initCanvas();

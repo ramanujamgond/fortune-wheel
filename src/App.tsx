@@ -4,8 +4,8 @@ import UserSignup from "./UserSignup";
 import Wheel from "./Wheel";
 
 function App() {
-  const [formState, setFormState] = useState(true);
-  const [wheelState, setWheelState] = useState(false);
+  const [formState, setFormState] = useState(false);
+  const [wheelState, setWheelState] = useState(true);
 
   // Save formState to localStorage whenever it changes
   useEffect(() => {
