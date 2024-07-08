@@ -3,6 +3,7 @@ import { Input } from "./components/ui/input";
 import { Checkbox } from "./components/ui/checkbox";
 import { Button } from "./components/ui/button";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 interface ClearErrorAfterTimeoutProps {
   setError: (value: string) => void;
@@ -13,7 +14,12 @@ const clearErrorAfterTimeout = ({ setError }: ClearErrorAfterTimeoutProps) => {
   }, 3000);
 };
 
-const UserSignup = () => {
+interface UserSignupProps {
+  setFormState: (value: boolean) => void;
+  setWheelState: (value: boolean) => void;
+}
+
+const UserSignup = ({ setFormState, setWheelState }: UserSignupProps) => {
   const [whatsAppNumberStatus, setWhatsAppNumberStatus] =
     useState<boolean>(true);
   const [userName, setUserName] = useState<string>("");
@@ -104,13 +110,22 @@ const UserSignup = () => {
         `https://api.pripgo.com/event/users`,
         payload
       );
-      console.log("userSubmitResponst", userSubmitResponse);
+      if (userSubmitResponse.data.status === 1) {
+        setFormState(false);
+        setWheelState(true);
+      } else if (userSubmitResponse.data.status === 0) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: userSubmitResponse.data.message,
+        });
+      }
     } catch (error) {
       console.log(error);
       new Error("Unable to create user");
-    } finally {
     }
   };
+
   return (
     <div>
       <main className="flex min-h-screen flex-col items-center justify-center p-8">

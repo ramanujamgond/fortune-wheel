@@ -15,7 +15,9 @@ function App() {
 
   return (
     <>
-      {formState && <UserSignup />}
+      {formState && (
+        <UserSignup setFormState={setFormState} setWheelState={setWheelState} />
+      )}
       {wheelState && <Wheel />}
     </>
   );
