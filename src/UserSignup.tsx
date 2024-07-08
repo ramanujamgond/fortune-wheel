@@ -2,25 +2,31 @@ import { useState } from "react";
 import { Input } from "./components/ui/input";
 import { Checkbox } from "./components/ui/checkbox";
 import { Button } from "./components/ui/button";
+import axios from "axios";
 
 const UserSignup = () => {
   const [whatsAppNumberStatus, setWhatsAppNumberStatus] =
-    useState<boolean>(false);
+    useState<boolean>(true);
+  const [userName, setUserName] = useState<string>("");
+  const [userNameErrorText, setUserNameErrorText] = useState<string>("");
+
+  const [emailId, setEmailId] = useState<string>("");
+  const [emailIdErrorText, setEmailIdErrorText] = useState<string>("");
+
+  const [phoneNumber, setPhoneNumber] = useState<number>();
+  const [phoneNumberErrorText, setPhoneNumberErrorText] = useState<string>("");
+
+  const [whatsAppNumber, setWhatsAppNumber] = useState<number>();
+  const [whatsAppNumberErrorText, setWhatsAppNumberErrorText] =
+    useState<number>();
+
+  const [propertyName, setPropertyName] = useState<string>("");
+
+  const handleFormSubmit = () => {};
   return (
     <div>
       <main className="flex min-h-screen flex-col items-center justify-center p-8">
         <div className="z-10 w-full max-w-5xl font-mono">
-          {/* <div className="w-96 h-96 relative rounded-xl border-2 border-black">
-          <Image
-            src="/qrcode.svg"
-            alt="Offers 1"
-            fill
-            className="rounded-xl object-contain"
-            sizes="auto"
-            loading="lazy"
-          />
-        </div> */}
-
           <div className="text-3xl font-bold text-center">
             Please provide the information to claim your surprise prize.
           </div>
@@ -31,7 +37,14 @@ const UserSignup = () => {
                 type="text"
                 className="h-12 text-base"
                 placeholder="Name"
+                value={userName}
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                }}
               />
+              <span className="text-xs text-red-600 text-left w-100 block">
+                {userNameErrorText}
+              </span>
             </div>
 
             <div className="my-6">
@@ -40,6 +53,9 @@ const UserSignup = () => {
                 className="h-12 text-base"
                 placeholder="Email Id"
               />
+              <span className="text-xs text-red-600 text-left w-100 block">
+                {userNameErrorText}
+              </span>
             </div>
 
             <div className="my-6">
@@ -63,6 +79,9 @@ const UserSignup = () => {
                   This number is WhatsApp number
                 </label>
               </div>
+              <span className="text-xs text-red-600 text-left w-100 block">
+                {userNameErrorText}
+              </span>
             </div>
 
             {!whatsAppNumberStatus && (
@@ -72,6 +91,9 @@ const UserSignup = () => {
                   className="h-12 text-base"
                   placeholder="Enter your whatsApp number"
                 />
+                <span className="text-xs text-red-600 text-left w-100 block">
+                  {userNameErrorText}
+                </span>
               </div>
             )}
 
@@ -81,6 +103,9 @@ const UserSignup = () => {
                 className="h-12 text-base"
                 placeholder="Property Name"
               />
+              <span className="text-xs text-red-600 text-left w-100 block">
+                {userNameErrorText}
+              </span>
             </div>
 
             <div className="my-6">
@@ -89,10 +114,15 @@ const UserSignup = () => {
                 className="h-12 text-base"
                 placeholder="Property Location"
               />
+              <span className="text-xs text-red-600 text-left w-100 block">
+                {userNameErrorText}
+              </span>
             </div>
 
             <div>
-              <Button size={"lg"}>Submit</Button>
+              <Button size={"lg"} onClick={handleFormSubmit}>
+                Submit
+              </Button>
             </div>
           </div>
         </div>
