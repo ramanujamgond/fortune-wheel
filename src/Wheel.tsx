@@ -5,13 +5,13 @@ import useWindowSize from "react-use/lib/useWindowSize";
 import Swal from "sweetalert2";
 import Confetti from "react-confetti";
 const segColors = [
-  "#FCC749",
-  "#DE2928",
-  "#3B86F1",
-  "#8747D7",
-  "#1C9783",
-  "#70C9E9",
-  "#FFF1D7",
+  "#673bb7",
+  "#03a9f5",
+  "#009788",
+  "#8bc24a",
+  "#fe5722",
+  "#ff9700",
+  "#ea1e53",
 ];
 
 interface WheelProps {
