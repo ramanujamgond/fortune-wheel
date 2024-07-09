@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./index.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 export interface Item {
   id: string;
   item_name: string;
@@ -105,7 +106,14 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   let winningSegment = "";
   const spin = async () => {
     winningSegment = await spinWheel();
-    if (!winningSegment) return;
+    if (!winningSegment) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "No more reward is available.",
+      });
+      return;
+    }
     isStarted = true;
     if (timerHandle === 0) {
       spinStart = new Date().getTime();
