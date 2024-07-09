@@ -5,6 +5,16 @@ import { Button } from "./components/ui/button";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Loader } from "lucide-react";
+import CountryCode from "./countryCode.json";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ClearErrorAfterTimeoutProps {
   setError: (value: string) => void;
@@ -32,9 +42,11 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
   const [emailIdErrorText, setEmailIdErrorText] = useState<string>("");
 
   const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [phoneCountryCode, setPhoneCountryCode] = useState<string>("+66");
   const [phoneNumberErrorText, setPhoneNumberErrorText] = useState<string>("");
 
   const [whatsAppNumber, setWhatsAppNumber] = useState<string>();
+  const [whatsAppCountryCode, setWhatsAppCountryCode] = useState<string>("+66");
   const [whatsAppNumberErrorText, setWhatsAppNumberErrorText] =
     useState<string>("");
 
@@ -102,8 +114,10 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
     const payload = {
       full_name: userName,
       email_id: emailId,
-      mobile_no: phoneNumber,
-      whatsapp_no: whatsAppNumber ? whatsAppNumber : phoneNumber,
+      mobile_no: phoneCountryCode + "-" + phoneNumber,
+      whatsapp_no: whatsAppNumber
+        ? whatsAppCountryCode + "-" + whatsAppNumber
+        : phoneCountryCode + "-" + phoneNumber,
       property_name: propertyName,
       property_location: propertyLocation,
     };
@@ -172,15 +186,36 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
             </div>
 
             <div className="my-6">
-              <Input
-                type="number"
-                className="h-12 text-base"
-                placeholder="Mobile Number"
-                value={phoneNumber}
-                onChange={(e) => {
-                  setPhoneNumber(e.target.value);
-                }}
-              />
+              <div className="flex items-center justify-center gap-3">
+                <Select
+                  value={phoneCountryCode}
+                  onValueChange={setPhoneCountryCode}
+                >
+                  <SelectTrigger className="w-[100px] h-12">
+                    <SelectValue placeholder="Country Code" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CountryCode.length > 0 &&
+                      CountryCode.map((countryItem, index) => (
+                        <SelectGroup key={index}>
+                          <SelectItem value={countryItem.dial_code}>
+                            {countryItem.code}
+                            {"-"}({countryItem.dial_code})
+                          </SelectItem>
+                        </SelectGroup>
+                      ))}
+                  </SelectContent>
+                </Select>
+                <Input
+                  type="number"
+                  className="h-12 text-base"
+                  placeholder="Mobile Number"
+                  value={phoneNumber}
+                  onChange={(e) => {
+                    setPhoneNumber(e.target.value);
+                  }}
+                />
+              </div>
               <div className="flex items-center justify-betweens w-100 space-x-2 my-3 mx-2">
                 <Checkbox
                   id="whatsApp"
@@ -203,13 +238,34 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
 
             {!whatsAppNumberStatus && (
               <div className="my-6">
-                <Input
-                  type="number"
-                  className="h-12 text-base"
-                  placeholder="Enter your whatsApp number"
-                  value={whatsAppNumber}
-                  onChange={(e) => setWhatsAppNumber(e.target.value)}
-                />
+                <div className="flex items-center justify-center gap-3">
+                  <Select
+                    value={whatsAppCountryCode}
+                    onValueChange={setWhatsAppCountryCode}
+                  >
+                    <SelectTrigger className="w-[100px] h-12">
+                      <SelectValue placeholder="Country Code" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CountryCode.length > 0 &&
+                        CountryCode.map((countryItem, index) => (
+                          <SelectGroup key={index}>
+                            <SelectItem value={countryItem.dial_code}>
+                              {countryItem.code}
+                              {"-"}({countryItem.dial_code})
+                            </SelectItem>
+                          </SelectGroup>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    type="number"
+                    className="h-12 text-base"
+                    placeholder="Enter your whatsApp number"
+                    value={whatsAppNumber}
+                    onChange={(e) => setWhatsAppNumber(e.target.value)}
+                  />
+                </div>
                 <span className="text-xs text-red-600 text-left w-100 block">
                   {whatsAppNumberErrorText}
                 </span>
