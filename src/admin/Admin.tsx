@@ -17,6 +17,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import UserRow from "./UserRow";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
 
 export interface UserDataProps {
   id: string;
@@ -41,7 +44,13 @@ export interface ItemOwn {
 const Admin = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>("all");
+  const [adminKey, setAdminKey] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>("");
   const [userData, setUserData] = useState<UserDataProps[]>([]);
+
+  //   admin key to access the routes
+  //   const adminAuthKey = process.env.REACT_APP_AUTH_KEY;
+
   const fetchUserInfo = async () => {
     setLoader(true);
     try {
@@ -60,69 +69,108 @@ const Admin = () => {
     }
   };
 
+  const handleClick = () => {
+    if (inputValue === "HqtNpv") {
+      setAdminKey(true);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Unauthorized",
+        text: "You do not have permission to access this page.",
+      });
+    }
+  };
+
+  const refreshData = () => {
+    fetchUserInfo();
+  };
+
   useEffect(() => {
     fetchUserInfo();
   }, [filter]);
+
   return (
     <div className="w-full">
-      <div className="flex items-center justify-center">
-        <div className="text-xl font-bold mb-5">Admin Panel</div>
-        <div className="ml-auto mb-5">
-          <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="own">Not Claim</SelectItem>
-                <SelectItem value="claim">Claim</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      {loader && (
-        <div className="flex items-center justify-center w-100 gap-2 my-9">
-          <Loader className="animate-spin" />
-          Loading...
+      {!adminKey && (
+        <div className="flex items-center justify-between gap-4 my-8">
+          <Input
+            type="text"
+            value={inputValue}
+            placeholder="Enter the secret key to access to dashborad"
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+            className="h-10"
+          />
+          <Button size={"lg"} onClick={handleClick}>
+            Submit
+          </Button>
         </div>
       )}
 
-      {!loader && userData.length === 0 && (
-        <div className="flex items-center justify-center w-100 gap-2 my-9">
-          No Data Found
-        </div>
-      )}
+      {adminKey && (
+        <>
+          <div className="flex items-center justify-center">
+            <div className="text-xl font-bold mb-5">Admin Panel</div>
+            <div className="flex gap-4 ml-auto mb-5">
+              <Button onClick={refreshData}>Refresh</Button>
+              <Select value={filter} onValueChange={setFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Filter" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="own">Not Claim</SelectItem>
+                    <SelectItem value="claim">Claim</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          {loader && (
+            <div className="flex items-center justify-center w-100 gap-2 my-9">
+              <Loader className="animate-spin" />
+              Loading...
+            </div>
+          )}
 
-      {!loader && userData.length > 0 && (
-        <div>
-          <Table className="border border-gray-300">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Mobile</TableHead>
-                <TableHead>WhatsApp</TableHead>
-                <TableHead>Property Name</TableHead>
-                <TableHead>Property Location</TableHead>
-                <TableHead>Own Status</TableHead>
-                <TableHead>Claim Status</TableHead>
-                <TableHead>Won</TableHead>
-                <TableHead>Claim</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {userData &&
-                userData.map((userItems) => (
-                  <UserRow
-                    userItems={userItems}
-                    fetchUserInfo={fetchUserInfo}
-                  />
-                ))}
-            </TableBody>
-          </Table>
-        </div>
+          {!loader && userData.length === 0 && (
+            <div className="flex items-center justify-center w-100 gap-2 my-9">
+              No Data Found
+            </div>
+          )}
+
+          {!loader && userData.length > 0 && (
+            <div>
+              <Table className="border border-gray-300">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Mobile</TableHead>
+                    <TableHead>WhatsApp</TableHead>
+                    <TableHead>Property Name</TableHead>
+                    <TableHead>Property Location</TableHead>
+                    <TableHead>Own Status</TableHead>
+                    <TableHead>Claim Status</TableHead>
+                    <TableHead>Won</TableHead>
+                    <TableHead>Claim</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {userData &&
+                    userData.map((userItems) => (
+                      <UserRow
+                        userItems={userItems}
+                        fetchUserInfo={fetchUserInfo}
+                      />
+                    ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -33,6 +33,9 @@ function Wheel({ setFormState, userID }: WheelProps) {
       text: "Snap a screenshot or show this screen to the host to claim your prize!",
       allowOutsideClick: false,
       showConfirmButton: false,
+      customClass: {
+        container: "swal-width",
+      },
     });
   };
 
@@ -81,7 +84,7 @@ function Wheel({ setFormState, userID }: WheelProps) {
   }, []);
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen overflow-hidden">
       {loading && (
         <div className="flex items-center gap-2">
           <Loader className="animate-spin" />

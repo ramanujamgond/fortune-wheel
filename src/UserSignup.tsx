@@ -135,7 +135,7 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
   return (
     <div>
       <main className="flex min-h-screen flex-col items-center justify-center">
-        <div className="z-10 w-full max-w-5xl font-mono">
+        <div className="z-10 w-full max-w-5xl font-mono p-6">
           <div className="text-3xl font-bold text-center">
             Please provide the information to claim your surprise prize.
           </div>
