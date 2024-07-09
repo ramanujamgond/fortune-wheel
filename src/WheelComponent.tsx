@@ -4,8 +4,6 @@ import axios from "axios";
 export interface Item {
   id: string;
   item_name: string;
-  quantity: number;
-  probability: number;
 }
 
 type WheelComponentProps = {
@@ -26,6 +24,7 @@ type WheelComponentProps = {
   fontFamily?: string;
   width?: number;
   height?: number;
+  userID: string;
 };
 
 const WheelComponent: React.FC<WheelComponentProps> = ({
@@ -41,6 +40,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   upDuration = 1000,
   downDuration = 100,
   fontFamily = "proxima-nova",
+  userID,
 }) => {
   let currentSegment: string = "";
   let isStarted: boolean = false;
@@ -58,16 +58,17 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   let frames: number = 0;
   const centerX: number = 300;
   const centerY: number = 300;
-  const [winning, setWinning] = useState("");
-  const [winning_id, setWinningID] = useState("");
-  const fetchRandom = async () => {
+
+  const spinWheel = async () => {
     try {
-      const { data } = await axios.get(
-        "https://api.pripgo.com/event/items/random"
+      const payload = {
+        user_id: userID,
+      };
+      const { data } = await axios.post(
+        "https://api.pripgo.com/event/items/spin",
+        payload
       );
       if (data.status === 1) {
-        setWinning(data.data.item_name);
-        setWinningID(data.data.id);
         return data.data.item_name;
       }
       return "";
@@ -103,7 +104,8 @@ const WheelComponent: React.FC<WheelComponentProps> = ({
   };
   let winningSegment = "";
   const spin = async () => {
-    winningSegment = await fetchRandom();
+    winningSegment = await spinWheel();
+    if (!winningSegment) return;
     isStarted = true;
     if (timerHandle === 0) {
       spinStart = new Date().getTime();

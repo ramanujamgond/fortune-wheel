@@ -1,21 +1,18 @@
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
-import { Check, Loader, X } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -93,7 +90,9 @@ const Admin = () => {
       )}
 
       {!loader && userData.length === 0 && (
-        <div className="flex items-center gap-2">No Data Found</div>
+        <div className="flex items-center justify-center w-100 gap-2 my-9">
+          No Data Found
+        </div>
       )}
 
       {!loader && userData.length > 0 && (

@@ -17,9 +17,10 @@ const clearErrorAfterTimeout = ({ setError }: ClearErrorAfterTimeoutProps) => {
 
 interface UserSignupProps {
   setFormState: (value: boolean) => void;
+  setUserID: any;
 }
 
-const UserSignup = ({ setFormState }: UserSignupProps) => {
+const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
   const [loading, setLoading] = useState(false);
 
   const [whatsAppNumberStatus, setWhatsAppNumberStatus] =
@@ -114,6 +115,7 @@ const UserSignup = ({ setFormState }: UserSignupProps) => {
         payload
       );
       if (userSubmitResponse.data.status === 1) {
+        setUserID(userSubmitResponse.data.data);
         setFormState(false);
       } else if (userSubmitResponse.data.status === 0) {
         Swal.fire({

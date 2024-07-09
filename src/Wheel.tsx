@@ -17,11 +17,10 @@ const segColors = [
 
 interface WheelProps {
   setFormState: (value: boolean) => void;
+  userID: string;
 }
-function Wheel({ setFormState }: WheelProps) {
+function Wheel({ setFormState, userID }: WheelProps) {
   const [segments, setSegemenmt] = useState<Item[]>([]);
-  const [winning, setWinning] = useState("");
-  const [winning_id, setWinningID] = useState("");
   const [loading, setLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const { width, height } = useWindowSize();
@@ -37,13 +36,13 @@ function Wheel({ setFormState }: WheelProps) {
     });
   };
 
-  console.log(winning_id);
-
   // fetch items
   const fetchItem = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("https://api.pripgo.com/event/items");
+      const { data } = await axios.get(
+        "https://api.pripgo.com/event/wheel_items"
+      );
       if (data.status === 1) {
         console.log(data.data);
         setSegemenmt(data.data);
@@ -52,21 +51,6 @@ function Wheel({ setFormState }: WheelProps) {
       console.log(error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchRandom = async () => {
-    try {
-      const { data } = await axios.get(
-        "https://api.pripgo.com/event/items/random"
-      );
-      if (data.status === 1) {
-        console.log(data.data);
-        setWinning(data.data.item_name);
-        setWinningID(data.data.id);
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -108,7 +92,7 @@ function Wheel({ setFormState }: WheelProps) {
         <WheelComponent
           segments={segments}
           segColors={segColors}
-          winningSegment={winning}
+          winningSegment={""}
           onFinished={(winner: any) => onFinished(winner)}
           contrastColor="white"
           buttonText="Spin"
@@ -116,6 +100,7 @@ function Wheel({ setFormState }: WheelProps) {
           size={200}
           upDuration={500}
           downDuration={600}
+          userID={userID}
         />
       )}
       <Confetti width={width} height={height} run={showConfetti} />

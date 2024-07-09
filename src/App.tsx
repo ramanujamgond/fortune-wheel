@@ -7,6 +7,7 @@ import Admin from "./admin/Admin";
 
 function App() {
   const [formState, setFormState] = useState(true);
+  const [userID, setUserID] = useState("");
 
   // Save formState to localStorage whenever it changes
   // useEffect(() => {
@@ -23,9 +24,12 @@ function App() {
               index
               element={
                 formState ? (
-                  <UserSignup setFormState={setFormState} />
+                  <UserSignup
+                    setFormState={setFormState}
+                    setUserID={setUserID}
+                  />
                 ) : (
-                  <Wheel setFormState={setFormState} />
+                  <Wheel setFormState={setFormState} userID={userID} />
                 )
               }
             />
