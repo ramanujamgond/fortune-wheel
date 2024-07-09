@@ -2,14 +2,24 @@ import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
+import { Check, Loader, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import UserRow from "./UserRow";
 
 export interface UserDataProps {
   id: string;
@@ -55,53 +65,66 @@ const Admin = () => {
 
   useEffect(() => {
     fetchUserInfo();
-  }, []);
+  }, [filter]);
   return (
-    <div>
-      <div className="text-xl font-bold">Admin Panel</div>
-      <div>
-        <Table className="border border-gray-300">
-          <TableCaption>A list of your recent invoices.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Mobile</TableHead>
-              <TableHead>WhatsApp</TableHead>
-              <TableHead>Property Name</TableHead>
-              <TableHead>Property Location</TableHead>
-              <TableHead>Own Status</TableHead>
-              <TableHead>Claim Status</TableHead>
-              <TableHead>Won</TableHead>
-              <TableHead>Claim</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {userData &&
-              userData.map((userItems) => (
-                <TableRow key={userItems?.id}>
-                  <TableCell>{userItems?.full_name}</TableCell>
-                  <TableCell>{userItems?.email_id}</TableCell>
-                  <TableCell>{userItems?.mobile_no}</TableCell>
-                  <TableCell>{userItems?.whatsapp_no}</TableCell>
-                  <TableCell>{userItems?.property_name}</TableCell>
-                  <TableCell>{userItems?.property_location}</TableCell>
-                  <TableCell>{userItems?.own_status}</TableCell>
-                  <TableCell>{userItems?.claim_status}</TableCell>
-                  <TableCell>{userItems?.item_own.item_name}</TableCell>
-                  <TableCell>
-                    {userItems?.own_status &&
-                    userItems.claim_status === false ? (
-                      <Button>Claim</Button>
-                    ) : (
-                      ""
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+    <div className="w-full">
+      <div className="flex items-center justify-center">
+        <div className="text-xl font-bold mb-5">Admin Panel</div>
+        <div className="ml-auto mb-5">
+          <Select value={filter} onValueChange={setFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="own">Not Claim</SelectItem>
+                <SelectItem value="claim">Claim</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+      {loader && (
+        <div className="flex items-center justify-center w-100 gap-2 my-9">
+          <Loader className="animate-spin" />
+          Loading...
+        </div>
+      )}
+
+      {!loader && userData.length === 0 && (
+        <div className="flex items-center gap-2">No Data Found</div>
+      )}
+
+      {!loader && userData.length > 0 && (
+        <div>
+          <Table className="border border-gray-300">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Mobile</TableHead>
+                <TableHead>WhatsApp</TableHead>
+                <TableHead>Property Name</TableHead>
+                <TableHead>Property Location</TableHead>
+                <TableHead>Own Status</TableHead>
+                <TableHead>Claim Status</TableHead>
+                <TableHead>Won</TableHead>
+                <TableHead>Claim</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {userData &&
+                userData.map((userItems) => (
+                  <UserRow
+                    userItems={userItems}
+                    fetchUserInfo={fetchUserInfo}
+                  />
+                ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 };
