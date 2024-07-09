@@ -142,10 +142,11 @@ const Admin = () => {
           )}
 
           {!loader && userData.length > 0 && (
-            <div>
+            <div className="mb-12">
               <Table className="border border-gray-300">
                 <TableHeader>
                   <TableRow>
+                    <TableHead>#</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Mobile</TableHead>
@@ -160,8 +161,9 @@ const Admin = () => {
                 </TableHeader>
                 <TableBody>
                   {userData &&
-                    userData.map((userItems) => (
+                    userData.map((userItems, index) => (
                       <UserRow
+                        index={index}
                         userItems={userItems}
                         fetchUserInfo={fetchUserInfo}
                       />

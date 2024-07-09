@@ -8,8 +8,9 @@ import axios from "axios";
 interface Props {
   userItems: UserDataProps;
   fetchUserInfo: any;
+  index: number;
 }
-const UserRow = ({ userItems, fetchUserInfo }: Props) => {
+const UserRow = ({ userItems, fetchUserInfo, index }: Props) => {
   const [claimLoader, setClaimLoader] = useState<boolean>(false);
 
   const claimUserPrize = async (user_id: string, item_id: string) => {
@@ -35,6 +36,7 @@ const UserRow = ({ userItems, fetchUserInfo }: Props) => {
 
   return (
     <TableRow key={userItems?.id}>
+      <TableCell>{index + 1}</TableCell>
       <TableCell>{userItems?.full_name}</TableCell>
       <TableCell>{userItems?.email_id}</TableCell>
       <TableCell>{userItems?.mobile_no}</TableCell>
