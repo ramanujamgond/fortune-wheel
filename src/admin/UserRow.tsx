@@ -35,7 +35,7 @@ const UserRow = ({ userItems, fetchUserInfo, index }: Props) => {
   };
 
   return (
-    <TableRow key={userItems?.id}>
+    <TableRow key={userItems?.id} className="text-left">
       <TableCell>{index + 1}</TableCell>
       <TableCell>{userItems?.full_name}</TableCell>
       <TableCell>{userItems?.email_id}</TableCell>
