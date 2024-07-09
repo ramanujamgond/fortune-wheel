@@ -2,6 +2,24 @@ import { useEffect, useState } from "react";
 import WheelComponent, { Item } from "./WheelComponent";
 import axios from "axios";
 import useWindowSize from "react-use/lib/useWindowSize";
+import tshirt from "../src/assets/tshirt.png";
+import cap from "../src/assets/cap.png";
+import coupon from "../src/assets/coupon.png";
+import notepad from "../src/assets/notepad.png";
+import pendrive from "../src/assets/pendrive.png";
+import pen from "../src/assets/pen.png";
+import free from "../src/assets/free.png";
+
+const itemImages: any = {
+  "T Shirt": tshirt,
+  Cap: cap,
+  Pendrive: pendrive,
+  Pen: pen,
+  Notepad: notepad,
+  "50% Discount": coupon,
+  "First year free": free,
+};
+
 import Swal from "sweetalert2";
 import Confetti from "react-confetti";
 import { Loader } from "lucide-react";
@@ -24,21 +42,34 @@ function Wheel({ setFormState, userID }: WheelProps) {
   const [loading, setLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const { width, height } = useWindowSize();
+  const size = window.innerWidth < 768 ? 200 : 300;
+  const imagesize = window.innerWidth < 768 ? 100 : "auto";
+
+  const getItemImage = (itemName: string) => {
+    return itemImages[itemName] || null;
+  };
+
   const onFinished = (winner: any) => {
     setShowConfetti(true);
+    const itemImage = getItemImage(winner);
     Swal.fire({
-      position: "bottom",
+      position: "top",
       padding: "1em",
-      title: `Woohoo! You've won ${winner}!`,
-      text: "Snap a screenshot or show this screen to the host to claim your prize!",
+      title: `<span style="color: #56d468; font-size: 18px;">Woohoo! You've won ${winner}!</span>`,
+      html: '<span style="color: #bfbfbf; font-size: 14px;">Snap a screenshot or show this screen to the host to claim your prize!</span>',
+      imageUrl: itemImage,
+      imageAlt: `${"winner"} Image`,
+      imageHeight: imagesize,
       allowOutsideClick: false,
       showConfirmButton: false,
       customClass: {
         container: "swal-width",
+        image: "swal-image",
+        title: "swal-title",
+        htmlContainer: "swal-title",
       },
     });
   };
-
   // fetch items
   const fetchItem = async () => {
     try {
@@ -100,7 +131,7 @@ function Wheel({ setFormState, userID }: WheelProps) {
           contrastColor="white"
           buttonText="Spin"
           isOnlyOnce={true}
-          size={200}
+          size={size}
           upDuration={500}
           downDuration={600}
           userID={userID}

@@ -74,3 +74,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+.swal-image {
+  margin-top: 0px !important;
+}
+.swal-title {
+  padding-top: 0px !important;
+}
