@@ -110,7 +110,7 @@ const Admin = () => {
 
       {adminKey && (
         <>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center my-6">
             <div className="text-xl font-bold mb-5">Admin Panel</div>
             <div className="flex gap-4 ml-auto mb-5">
               <Button onClick={refreshData}>Refresh</Button>
