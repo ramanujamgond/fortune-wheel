@@ -60,7 +60,7 @@ const Admin = () => {
     <div>
       <div className="text-xl font-bold">Admin Panel</div>
       <div>
-        <Table>
+        <Table className="border border-gray-300">
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>

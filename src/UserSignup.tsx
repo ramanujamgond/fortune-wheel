@@ -4,6 +4,7 @@ import { Checkbox } from "./components/ui/checkbox";
 import { Button } from "./components/ui/button";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Loader } from "lucide-react";
 
 interface ClearErrorAfterTimeoutProps {
   setError: (value: string) => void;
@@ -19,6 +20,8 @@ interface UserSignupProps {
 }
 
 const UserSignup = ({ setFormState }: UserSignupProps) => {
+  const [loading, setLoading] = useState(false);
+
   const [whatsAppNumberStatus, setWhatsAppNumberStatus] =
     useState<boolean>(true);
   const [userName, setUserName] = useState<string>("");
@@ -105,6 +108,7 @@ const UserSignup = ({ setFormState }: UserSignupProps) => {
     };
 
     try {
+      setLoading(true);
       const userSubmitResponse = await axios.post(
         `https://api.pripgo.com/event/users`,
         payload
@@ -121,6 +125,8 @@ const UserSignup = ({ setFormState }: UserSignupProps) => {
     } catch (error) {
       console.log(error);
       new Error("Unable to create user");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -235,7 +241,8 @@ const UserSignup = ({ setFormState }: UserSignupProps) => {
             </div>
 
             <div>
-              <Button size={"lg"} onClick={handleFormSubmit}>
+              <Button size={"lg"} onClick={handleFormSubmit} disabled={loading}>
+                {loading && <Loader className="animate-spin mr-2" />}
                 Submit
               </Button>
             </div>
