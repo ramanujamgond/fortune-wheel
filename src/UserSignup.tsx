@@ -276,7 +276,7 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
               <Input
                 type="text"
                 className="h-12 text-base"
-                placeholder="Property Name"
+                placeholder="Property Name (ชื่อโรงเเรม)"
                 value={propertyName}
                 onChange={(e) => setPropertyName(e.target.value)}
               />
@@ -289,7 +289,7 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
               <Input
                 type="text"
                 className="h-12 text-base"
-                placeholder="Property Location"
+                placeholder="Property Location (ที่ตั้งโรงเเรม)"
                 value={propertyLocation}
                 onChange={(e) => setPropertyLocation(e.target.value)}
               />
