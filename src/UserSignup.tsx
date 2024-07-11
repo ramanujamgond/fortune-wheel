@@ -159,7 +159,7 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
               <Input
                 type="text"
                 className="h-12 text-base"
-                placeholder="Name"
+                placeholder="Name (ชื่อ)"
                 value={userName}
                 onChange={(e) => {
                   setUserName(e.target.value);
@@ -174,7 +174,7 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
               <Input
                 type="email"
                 className="h-12 text-base"
-                placeholder="Email Id"
+                placeholder="Email Id (อีเมล์)"
                 value={emailId}
                 onChange={(e) => {
                   setEmailId(e.target.value);
@@ -209,7 +209,7 @@ const UserSignup = ({ setFormState, setUserID }: UserSignupProps) => {
                 <Input
                   type="number"
                   className="h-12 text-base"
-                  placeholder="Mobile Number"
+                  placeholder="Mobile Number (เบอร์โทรศัพท์)"
                   value={phoneNumber}
                   onChange={(e) => {
                     setPhoneNumber(e.target.value);
