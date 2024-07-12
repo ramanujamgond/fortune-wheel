@@ -37,7 +37,7 @@ interface WheelProps {
   setFormState: (value: boolean) => void;
   userID: string;
 }
-function Wheel({ setFormState, userID }: WheelProps) {
+function Wheel({ userID }: WheelProps) {
   const [segments, setSegemenmt] = useState<Item[]>([]);
   const [loading, setLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
