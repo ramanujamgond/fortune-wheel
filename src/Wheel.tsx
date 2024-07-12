@@ -69,6 +69,10 @@ function Wheel({ setFormState, userID }: WheelProps) {
         htmlContainer: "swal-title",
       },
     });
+    // redirect to https://g.page/r/CVz_d2uj25ffEAE/review url after 5s
+    setTimeout(() => {
+      window.location.href = "https://g.page/r/CVz_d2uj25ffEAE/review";
+    }, 5000);
   };
   // fetch items
   const fetchItem = async () => {
@@ -92,27 +96,27 @@ function Wheel({ setFormState, userID }: WheelProps) {
     fetchItem();
   }, []);
 
-  useEffect(() => {
-    const handleBeforeUnload = (event: any) => {
-      console.log("User attempted to reload or close the page.");
-      // Prompt the user with a confirmation dialog
-      event.preventDefault();
-      event.returnValue = ""; // For older browsers
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event: any) => {
+  //     console.log("User attempted to reload or close the page.");
+  //     // Prompt the user with a confirmation dialog
+  //     event.preventDefault();
+  //     event.returnValue = ""; // For older browsers
+  //   };
 
-    const handleUnload = () => {
-      console.log("User confirmed the reload or close action.");
-      setFormState(true);
-    };
+  //   const handleUnload = () => {
+  //     console.log("User confirmed the reload or close action.");
+  //     setFormState(true);
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("unload", handleUnload);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("unload", handleUnload);
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("unload", handleUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //     window.removeEventListener("unload", handleUnload);
+  //   };
+  // }, []);
 
   return (
     <div className="flex items-center justify-center h-screen overflow-hidden">
